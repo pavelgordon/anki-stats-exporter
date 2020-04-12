@@ -46,7 +46,7 @@ data class Request(
 
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
-fun Application.module(testing: Boolean = true) {
+fun Application.module(testing: Boolean = false) {
     install(CallLogging) {
         level = Level.INFO
         filter { call -> call.request.path().startsWith("/") }
@@ -112,11 +112,12 @@ fun Application.module(testing: Boolean = true) {
             kotlin.runCatching {
                 val url = call.request.queryParameters["url"]?:"http://localhost:8080"
 
-                val cards = client.post<JsonObject> {
+                val result = client.post<JsonObject> {
                     url("$url/stats")
                     contentType(ContentType.Application.Json)
                     body = dto
                 }
+                println("result $result")
             }
             call.respond(dto)
         }
@@ -134,22 +135,23 @@ fun Application.module(testing: Boolean = true) {
         }
     }
 
-    launch {
-        sleep(2000)
-        // Sample for making a HTTP Client request
-        /*
-        val message = client.post<JsonSampleClass> {
-            url("http://127.0.0.1:8080/path/to/endpoint")
-            contentType(ContentType.Application.Json)
-            body = JsonSampleClass(hello = "world")
-        }
-        */
+    if (testing)
+        launch {
+            sleep(2000)
+            // Sample for making a HTTP Client request
+            /*
+            val message = client.post<JsonSampleClass> {
+                url("http://127.0.0.1:8080/path/to/endpoint")
+                contentType(ContentType.Application.Json)
+                body = JsonSampleClass(hello = "world")
+            }
+            */
 
-        val message = client.get<String> {
-            url("http://127.0.0.1:8080/anki/stats")
+            val message = client.get<String> {
+                url("http://127.0.0.1:8080/anki/stats")
+            }
+            println(message)
         }
-        println(message)
-    }
 }
 
 
