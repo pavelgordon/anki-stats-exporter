@@ -21,6 +21,8 @@ import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.gson.gson
 import io.ktor.http.ContentType
+import io.ktor.http.content.default
+import io.ktor.http.content.resource
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.http.contentType
@@ -73,13 +75,13 @@ fun Application.module(testing: Boolean = false) {
 
 
     routing {
-        get("/") {
-            call.respond(STORAGE.stats)
-        }
+
 
         // Static feature. Try to access `/static/ktor_logo.svg`
-        static("/static") {
-            resources("static")
+        static {
+            resource("/", "index.html")
+            resources("css")
+            resources("js")
         }
         //endpoints for local deploy
         get("/anki/stats") {
