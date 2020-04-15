@@ -1,5 +1,6 @@
 ## Anki stats exporter
-Fetches statistics of learned cards from Anki Desktop and renders them as html page
+Fetches statistics of learned cards from Anki Desktop and renders them as html page.  
+https://anki.pgordon.dev/stats
 ## Tech/framework used
 - Kotlin
 - Ktor
