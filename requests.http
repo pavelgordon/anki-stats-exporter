@@ -1,0 +1,24 @@
+GET localhost:8080/stats
+Accept: application/json
+
+###
+
+POST localhost:8080/stats
+Accept: application/json
+
+{
+    "stats": {
+        "Italiano": {
+            "new": 600,
+            "learned": 288,
+            "matured": 24
+        },
+        "German": {
+            "new": 1770,
+            "learned": 80,
+            "matured": 0
+        }
+    }
+}
+
+###

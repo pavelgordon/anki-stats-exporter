@@ -91,7 +91,7 @@ fun Application.module(testing: Boolean = false) {
         // fetching stats from local anki instance and then delivering them to provided https://$host/stats
         get("/anki/stats") {
             val decks = listOf("Italiano", "German")
-            val deckStats = decks.map { deckName ->
+            val decksStats = decks.map { deckName ->
                 val cards = client.post<JsonObject> {
                     url(LOCAL_ANKI_URL)
                     contentType(Json)
@@ -111,7 +111,9 @@ fun Application.module(testing: Boolean = false) {
                 }
             }.toMap()
 
-            val dto = StatsDTO(stats = deckStats)
+            storage.stats = decksStats
+
+            val dto = StatsDTO(stats = decksStats)
             kotlin.runCatching {
                 val host = call.request.queryParameters["url"] ?: "http://localhost:8080"
                 client.post<JsonObject> {
@@ -120,6 +122,7 @@ fun Application.module(testing: Boolean = false) {
                     body = dto
                 }
             }
+
             call.respond(dto)
         }
     }
